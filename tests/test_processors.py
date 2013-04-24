@@ -12,19 +12,17 @@
 from __future__ import with_statement
 
 from datetime import date
-from unittest2 import TestSuite
 
 from flask import json
 from flask.ext.restless.views import ProcessingException
 from .helpers import TestSupport
 
-__all__ = ['ProcessorsTest']
 
 dumps = json.dumps
 loads = json.loads
 
 
-class ProcessorsTest(TestSupport):
+class TestProcessors(TestSupport):
     """Unit tests for preprocessors and postprocessors."""
 
     def setUp(self):
@@ -33,7 +31,7 @@ class ProcessorsTest(TestSupport):
 
         """
         # create the database
-        super(ProcessorsTest, self).setUp()
+        super(TestProcessors, self).setUp()
 
         # to facilitate searching
         self.app.search = lambda url, q: self.app.get(url + '?q=%s' % q)
@@ -278,10 +276,3 @@ class ProcessorsTest(TestSupport):
         person_response = loads(response.data)["objects"][0]
         assert person_response['name'] == person.name
         assert person_response['age'] == person.age
-
-
-def load_tests(loader, standard_tests, pattern):
-    """Returns the test suite for this module."""
-    suite = TestSuite()
-    suite.addTest(loader.loadTestsFromTestCase(ProcessorsTest))
-    return suite
